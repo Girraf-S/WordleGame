@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
-public class LenghtException extends Exception{
+public class LenghtException extends RuntimeException{
     public LenghtException(String message){
         super(message);
     }

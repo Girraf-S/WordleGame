@@ -1,79 +1,77 @@
 package by.hembar;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.*;
+import java.util.List;
+import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class WordleGameTest {
-    private static String word, fullFailGuess, failGuess, partiallyFailGuess, failLengthGuess, correctGuess;
-    private static Color[] correctGuessColor, fullFailGuessColor, failGuessColor, partiallyFailGuessColor;
     private static WordleGame wordleGame;
-    @BeforeClass
+
+    private static Stream<Arguments> params() {
+        return Stream.of(
+                Arguments.of("world", List.of(new Color[]{
+                        Color.YELLOW, Color.GREEN, Color.BLACK, Color.YELLOW, Color.BLACK
+                })),
+                Arguments.of("hello", List.of(new Color[]{
+                        Color.BLACK, Color.YELLOW, Color.YELLOW, Color.BLACK, Color.YELLOW
+                })),
+                Arguments.of("again", List.of(new Color[]{
+                        Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
+                })),
+                Arguments.of("tests", List.of(new Color[]{
+                        Color.BLACK, Color.YELLOW, Color.BLACK, Color.BLACK, Color.BLACK
+                })),
+                Arguments.of("tools", List.of(new Color[]{
+                        Color.BLACK, Color.GREEN, Color.BLACK, Color.YELLOW, Color.BLACK
+                })),
+                Arguments.of("terms", List.of(new Color[]{
+                        Color.BLACK, Color.YELLOW, Color.BLACK, Color.BLACK, Color.BLACK
+                })),
+                Arguments.of("ooooo", List.of(new Color[]{
+                        Color.BLACK, Color.GREEN, Color.BLACK, Color.BLACK, Color.BLACK
+                })),
+                Arguments.of("vvvvv", List.of(new Color[]{
+                        Color.GREEN, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
+                })),
+                Arguments.of("vowle", List.of(new Color[]{
+                        Color.GREEN, Color.GREEN, Color.GREEN, Color.YELLOW, Color.YELLOW
+                }))
+        );
+    }
+
+    private static Stream<Arguments> exceptionParams() {
+        return Stream.of(
+                Arguments.of(null, "smth", "Empty field \"word\" in class WordleGame"),
+                Arguments.of("", "smth", "Empty field \"word\" in class WordleGame"),
+                Arguments.of("smth", null, "Empty argument or NPE"),
+                Arguments.of("smth", "", "Empty argument or NPE"),
+                Arguments.of("something", "smth", "Incorrect length of guess")
+        );
+    }
+
+    @BeforeAll
     public static void init() {
-        word = "today";
-        wordleGame= new WordleGame(word);
-
-        partiallyFailGuess = "world";
-        partiallyFailGuessColor =new Color[]{Color.BLACK, Color.GREEN, Color.BLACK, Color.BLACK, Color.YELLOW};
-
-        failGuess = "phone";
-        failGuessColor = new Color[]{Color.BLACK, Color.BLACK, Color.YELLOW, Color.BLACK, Color.BLACK};
-
-        fullFailGuess = "guess";
-        fullFailGuessColor = new Color[]{Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK};
-
-        failLengthGuess="carrot";
-
-        correctGuess=word;
-
-        correctGuessColor = new Color[]{Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN,Color.GREEN};
+        String word = "vowel";
+        wordleGame = new WordleGame(word);
     }
 
-    @Test
-    public void guessMethodThrowException(){
-        boolean exceptionThrown = false;
-        try{
-            wordleGame.guess(failLengthGuess);
-        } catch (LenghtException e) {
-            exceptionThrown=true;
-        }
-        assertTrue("Exception not thrown",exceptionThrown);
-    }
-    @Test
-    public void guessMethodNotThrowException(){
-        boolean exceptionThrown = false;
-        try{
-            wordleGame.guess(failGuess );
-        } catch (LenghtException e) {
-            exceptionThrown=true;
-        }
-        assertFalse("Exception thrown",exceptionThrown);
-    }
-    @Test
-    public void correctGuess() {
-        try {
-            assertArrayEquals(correctGuessColor, wordleGame.guess(correctGuess));
-        } catch (LenghtException ignored) {}
-    }
-    @Test
-    public void partiallyFailGuess() {
-        try {
-            assertArrayEquals(partiallyFailGuessColor, wordleGame.guess(partiallyFailGuess));
-        } catch (LenghtException ignored) {}
-    }
-    @Test
-    public void failGuess() {
-        try {
-            assertArrayEquals(failGuessColor, wordleGame.guess(failGuess));
-        } catch (LenghtException ignored) {}
-    }
-    @Test
-    public void fullFailGuess() {
-        try {
-            assertArrayEquals(fullFailGuessColor, wordleGame.guess(fullFailGuess));
-        } catch (LenghtException ignored) {}
+    @ParameterizedTest
+    @MethodSource("exceptionParams")
+    public void guessMethodThrowException(String word, String guessWord, String message) {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> new WordleGame(word).guess(guessWord), message);
+        assertEquals(exception.getMessage(), message);
     }
 
+    @ParameterizedTest
+    @MethodSource("params")
+    public void guess(String guessWord, List<Color> resultColor) {
+        assertEquals(List.of(wordleGame.guess(guessWord)), resultColor);
+    }
 }
