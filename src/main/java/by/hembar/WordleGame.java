@@ -18,12 +18,15 @@ public class WordleGame {
         for (int i = 0; i < word.length(); i++) {
             if (word.toCharArray()[i] == guessWord.toCharArray()[i]) {
                 guessResult[i] = Color.GREEN;
-            } else {
-                for (int j = 0; j < word.length(); j++) {
-                    if (word.toCharArray()[i] == guessWord.toCharArray()[j]) {
-                        guessResult[j] = Color.YELLOW;
-                        break;
-                    }
+            }
+        }
+        for (int i = 0; i < word.length(); i++) {
+            if (guessResult[i].equals(Color.GREEN)) continue;
+            for (int j = 0; j < word.length(); j++) {
+                if (word.toCharArray()[i] == guessWord.toCharArray()[j]
+                && guessResult[j].equals(Color.BLACK)) {
+                    guessResult[j] = Color.YELLOW;
+                    break;
                 }
             }
         }
@@ -31,10 +34,10 @@ public class WordleGame {
     }
 
     private void validator(String guessWord) {
-        if (StringUtils.isEmpty(guessWord)){
+        if (StringUtils.isEmpty(guessWord)) {
             throw new RuntimeException("Empty argument or NPE");
         }
-        if(StringUtils.isEmpty(word)){
+        if (StringUtils.isEmpty(word)) {
             throw new RuntimeException("Empty field \"word\" in class WordleGame");
         }
         if (guessWord.length() != word.length()) {

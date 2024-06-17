@@ -13,35 +13,26 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class WordleGameTest {
     private static WordleGame wordleGame;
-
+//ataat
     private static Stream<Arguments> params() {
         return Stream.of(
-                Arguments.of("world", List.of(new Color[]{
-                        Color.YELLOW, Color.GREEN, Color.BLACK, Color.YELLOW, Color.BLACK
+                Arguments.of("aaaat", List.of(new Color[]{
+                        Color.GREEN, Color.BLACK, Color.GREEN, Color.GREEN, Color.GREEN
                 })),
-                Arguments.of("hello", List.of(new Color[]{
-                        Color.BLACK, Color.YELLOW, Color.YELLOW, Color.BLACK, Color.YELLOW
+                Arguments.of("taaha", List.of(new Color[]{
+                        Color.YELLOW, Color.YELLOW, Color.GREEN, Color.BLACK, Color.YELLOW
                 })),
-                Arguments.of("again", List.of(new Color[]{
+                Arguments.of("hhhhk", List.of(new Color[]{
                         Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
                 })),
-                Arguments.of("tests", List.of(new Color[]{
-                        Color.BLACK, Color.YELLOW, Color.BLACK, Color.BLACK, Color.BLACK
+                Arguments.of("ataat", List.of(new Color[]{
+                        Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN
                 })),
-                Arguments.of("tools", List.of(new Color[]{
-                        Color.BLACK, Color.GREEN, Color.BLACK, Color.YELLOW, Color.BLACK
+                Arguments.of("ttatt", List.of(new Color[]{
+                        Color.BLACK, Color.GREEN, Color.GREEN, Color.BLACK, Color.GREEN
                 })),
-                Arguments.of("terms", List.of(new Color[]{
-                        Color.BLACK, Color.YELLOW, Color.BLACK, Color.BLACK, Color.BLACK
-                })),
-                Arguments.of("ooooo", List.of(new Color[]{
-                        Color.BLACK, Color.GREEN, Color.BLACK, Color.BLACK, Color.BLACK
-                })),
-                Arguments.of("vvvvv", List.of(new Color[]{
-                        Color.GREEN, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
-                })),
-                Arguments.of("vowle", List.of(new Color[]{
-                        Color.GREEN, Color.GREEN, Color.GREEN, Color.YELLOW, Color.YELLOW
+                Arguments.of("tatta", List.of(new Color[]{
+                        Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.BLACK, Color.YELLOW
                 }))
         );
     }
@@ -58,7 +49,7 @@ public class WordleGameTest {
 
     @BeforeAll
     public static void init() {
-        String word = "vowel";
+        String word = "ataat";
         wordleGame = new WordleGame(word);
     }
 
@@ -72,6 +63,6 @@ public class WordleGameTest {
     @ParameterizedTest
     @MethodSource("params")
     public void guess(String guessWord, List<Color> resultColor) {
-        assertEquals(List.of(wordleGame.guess(guessWord)), resultColor);
+        assertEquals(resultColor, List.of(wordleGame.guess(guessWord)));
     }
 }
